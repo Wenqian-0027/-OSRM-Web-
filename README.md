@@ -14,31 +14,40 @@
 - 步步指导：生成路径后提供对应的中文导航指示列表，点击高亮地图节点。
 - 可视化：Leaflet地图实时渲染，Popup显示点位详情。
 
-## 运行环境&技术栈
+## 技术栈
 - 前端：HTML5、CSS3、JavaScript + Leaflet.js v1.9.4（交互地图）。
-- 路径引擎： OSRM（bike profile，支持 A*/Dijkstra + CH 收缩层次加速）。
+- 路径引擎： OSRM【bike profile，支持Contraction Hierarchies (CH)与Multi-Level Dijkstra (MLD)路径加速收缩】
 - API服务：
-  1）Nearest Service
-  2）OSRM Route Service
-  /Trip/Nearest
-- 算法：数据结构/算法、路径加速（CH/CRP）
+  + Nearest Service
+  + Route Service
+  + Trip Service
 - 浏览器：Chrome/Firefox，支持 Leaflet.js
 - 地图中心：珠海示例（可修改坐标）
-
-- 
 - 需要本地 OSRM 服务器（支持 bike profile）：从 [OSRM GitHub](https://github.com/Project-OSRM/osrm-backend) 下载，运行 `osrm-extract`、`osrm-partition`、`osrm-customize` 和 `osrm-routed`（端口 5000）。
 
-## 快速启动
-1. 启动 OSRM 服务器：`./osrm-routed --algorithm MLD data.osrm`.
-2. 打开 `index2.html` 在浏览器中运行。
+## 运行环境&快速启动
+- 使用Docker导入后端环境
+1. 下载珠海的OpenStreetMap[摘录](https://download.geofabrik.de/)。
+2. 提取（osrm-extract）：从原始 .osm.pbf 文件（OpenStreetMap 数据）提取路网，生成 .osrm 文件。 在osm.pdf目录下打开终端，输入以下指令（PowerShell 支持）。
+```C
+docker run -t -v "${PWD}:/data" ghcr.io/project-osrm/osrm-backend osrm-extract -p /opt/bicycle.lua /data/guangdong-latest.osm.pbf; if ($LASTEXITCODE -ne 0) { Write-Output "osrm-extract failed" }
+```
+3. 分区（osrm-partition）：将路网划分为子区域,OSRM 使用多级分区（Multi-Level Partitioning）技术来优化大规模路由数据的查询性能。
+```C
+docker run -t -v "${PWD}:/data" ghcr.io/project-osrm/osrm-backend osrm-partition /data/guangdong-latest.osrm; if ($LASTEXITCODE -ne 0) { Write-Output "osrm-partition failed" }
+```
+4. 定制（osrm-customize）：生成查询所需的额外数据结构（如权重、查找表）。
+```C
+docker run -t -v "${PWD}:/data" ghcr.io/project-osrm/osrm-backend osrm-customize /data/guangdong-latest.osrm; if ($LASTEXITCODE -ne 0) { Write-Output "osrm-customize failed" }
+```
+5. 启动路由服务，基于处理后的数据响应路由请求，启动服务器，提供 API 查询。
+```C
+docker run -t -i -p 5000:5000 -v "${PWD}:/data" ghcr.io/project-osrm/osrm-backend osrm-routed --algorithm mld /data/berlin-latest.osrm
+```
+- 前端运行
+1. 打开 `index.html` 在浏览器中运行。
 
-## 技术栈
-- 前端：HTML/CSS/JavaScript + Leaflet.js。
-- 后端：OSRM API（路径规划）。
-- 语言：JavaScript。
 
-## 贡献
-欢迎 Pull Request！如需 AI 增强版，见分支 `ai-enhanced`。
+## OSRM API官方
+OSRM API [官方文档](https://project-osrm.org/docs/v5.5.1/api/?language=cURL#general-options)
 
-## 许可证
-MIT License。
