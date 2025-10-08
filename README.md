@@ -17,7 +17,10 @@
 ## 运行环境&技术栈
 - 前端：HTML5、CSS3、JavaScript + Leaflet.js v1.9.4（交互地图）。
 - 路径引擎： OSRM（bike profile，支持 A*/Dijkstra + CH 收缩层次加速）。
-- API服务：OSRM Route/Trip/Nearest
+- API服务：
+  1）Nearest Service
+  2）OSRM Route Service
+  /Trip/Nearest
 - 算法：数据结构/算法、路径加速（CH/CRP）
 - 浏览器：Chrome/Firefox，支持 Leaflet.js
 - 地图中心：珠海示例（可修改坐标）
