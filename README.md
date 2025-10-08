@@ -23,7 +23,7 @@
   + Trip Service
 - 浏览器：Chrome/Firefox，支持 Leaflet.js
 - 地图中心：珠海示例（可修改坐标）
-- 需要本地 OSRM 服务器（支持 bike profile）：从 [OSRM GitHub](https://github.com/Project-OSRM/osrm-backend) 下载，运行 `osrm-extract`、`osrm-partition`、`osrm-customize` 和 `osrm-routed`（端口 5000）。
+- 需要本地 OSRM 服务器（支持 bike profile）
 
 ## 运行环境&快速启动
 - 使用Docker导入后端环境
