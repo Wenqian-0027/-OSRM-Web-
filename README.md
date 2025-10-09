@@ -28,7 +28,7 @@
 ## 运行环境&快速启动
 - 使用Docker导入后端环境
 1. 下载珠海的OpenStreetMap[摘录](https://download.geofabrik.de/)。
-2. 提取（osrm-extract）：从原始 .osm.pbf 文件（OpenStreetMap 数据）提取路网，生成 .osrm 文件。 在osm.pdf目录下打开终端，输入以下指令（PowerShell 支持）。
+2. 提取（osrm-extract）：从原始 .osm.pbf 文件（OpenStreetMap 数据）提取路网，生成 .osrm 文件。 在osm.pbf目录下打开终端，输入以下指令（PowerShell 支持）。
 ```C
 docker run -t -v "${PWD}:/data" ghcr.io/project-osrm/osrm-backend osrm-extract -p /opt/bicycle.lua /data/guangdong-latest.osm.pbf; if ($LASTEXITCODE -ne 0) { Write-Output "osrm-extract failed" }
 ```
