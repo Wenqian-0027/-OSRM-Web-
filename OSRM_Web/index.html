@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>智能骑行助理 - OSRM 增强版</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+    <h1>🚴‍♂️ 智能骑行助理（基于 OSRM）</h1>
+    <div id="info">
+        <p style="text-align: center; font-size: 1.1em;">点击地图添加点位（最多8个）。拖拽调整位置。选择模式开始规划！</p>
+        
+        <!-- 模式切换标签页 -->
+        <div id="mode-tabs">
+            <button class="tab-btn active" onclick="switchMode('manual')">手动模式（自定义顺序）</button>
+            <button class="tab-btn" onclick="switchMode('optimize')">优化模式（系统规划）</button>
+        </div>
+        
+        <!-- 手动模式内容 -->
+        <div id="manual-content" class="tab-content active">
+            <div class="mode-desc">📝 您来决定点位的顺序：添加点后直接生成路径，按点击顺序固定。</div>
+            <button id="snap-points-manual" onclick="snapPoints()" disabled>吸附到最近道路</button>
+            <button id="generate-route-manual" onclick="generateRouteManual()" disabled>生成骑行路线（顺序固定）</button>
+            <button onclick="resetWaypoints()">重置点位</button>
+        </div>
+        
+        <!-- 优化模式内容 -->
+        <div id="optimize-content" class="tab-content">
+            <div class="mode-desc">🤖 系统帮您规划：添加点后优化顺序，生成最短/最优路径。</div>
+            <button id="snap-points-optimize" onclick="snapPoints()" disabled>吸附到最近道路</button>
+            <button id="optimize-trip" onclick="optimizeTrip()" disabled>智能优化顺序</button>
+            <button id="compare-matrix" onclick="compareMatrix()" disabled>比较距离/时间</button>
+            <button id="generate-route-optimize" onclick="generateRouteOptimize()" disabled>生成最优骑行路线</button>
+            <button onclick="resetWaypoints()">重置点位</button>
+        </div>
+        
+        <p id="routeInfo">主路线距离: -- 米 | 主路线时间: -- 秒</p>
+        <p id="status">状态: 选择模式并点击地图添加起点。</p>
+        <div id="comparison"></div>
+    </div>
+    
+    <!-- 左右布局容器 -->
+    <div id="container">
+        <div id="map"></div>
+        <div id="directions">
+            <h3>骑行步步指导</h3>
+            <div id="directions-content">请添加点位并生成路线以查看详细步步指示。点击步骤可在地图上高亮转向节点。</div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
